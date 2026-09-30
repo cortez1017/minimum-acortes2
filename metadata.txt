@@ -1,0 +1,17 @@
+hw: 1
+name: Aldo Cortes
+email: <acortes2@stevens.edu>
+github: https://github.com/cortez1017/minimum-acortes2
+collaborators:
+ai:
+- GPT-5.6 Sol:
+  - Helped interpret the Homework 1 requirements and required deliverables.
+  - Helped configure the Docker development environment and troubleshoot Git line-ending and repository ownership issues.
+  - Helped implement and debug Task 1 UART output.
+  - Helped understand the provided IRQ context-switch example and ARM IRQ trampoline.
+  - Helped implement Task 2 interrupt-driven UART input and shell command processing.
+  - Helped debug the kernel Makefile changes needed to compile irq.S.
+  - Helped test the implementation using the provided HW1 test suite.
+  - Helped identify and correct shell edge cases involving unknown commands, newline handling, backspace, and overlong input.
+
+pledge: I pledge on my honor that I have abided by the Stevens Honor System.
