@@ -12,6 +12,8 @@
 static volatile char input_buffer[INPUT_SIZE];
 static volatile size_t input_length = 0;
 static volatile int line_ready = 0;
+static volatile int line_overflow = 0;
+
 
 static void uart_putc(char c) {
     MINEMU_UART0->tx_data = (uint8_t)c;
@@ -56,7 +58,13 @@ static void process_command(char *line) {
     }
 
     uart_puts("command not found: ");
-    uart_puts(&line[start]);
+
+    size_t index = start;
+    
+    while (line[index] != '\0' && line[index] != ' '){
+        uart_putc(line[index]);
+        ++index;
+    }
     uart_putc('\n');
 }
 
@@ -68,7 +76,7 @@ struct minemu_trap_frame *minemu_irq_dispatch(struct minemu_trap_frame *frame) {
             uint8_t c = (uint8_t)MINEMU_UART0->rx_data;
 
             if (!line_ready) {
-                if (c == '\n' || c == '\r') {
+                if (c == '\n') {
                     input_buffer[input_length] = '\0';
                     line_ready = 1;
                 } else if (c == 0x08 || c == 0x7f) {
@@ -78,6 +86,8 @@ struct minemu_trap_frame *minemu_irq_dispatch(struct minemu_trap_frame *frame) {
                 } else if (input_length < INPUT_SIZE - 1) {
                     input_buffer[input_length] = (char)c;
                     ++input_length;
+                } else {
+                    line_overflow = 1;
                 }
             }
         }
