@@ -35,8 +35,24 @@ void minemu_enter_user(uint32_t entry_vaddr, uint32_t stack_top) __attribute__((
 
 static void zero_bytes(void *destination, size_t length) {
     uint8_t *bytes = destination;
-    for (size_t index = 0; index < length; ++index) {
-        bytes[index] = 0;
+
+    while (length > 0 && ((uintptr_t)bytes & 3U) != 0U) {
+        *bytes++ = 0;
+        length--;
+    }
+
+    uint32_t *words = (uint32_t *)bytes;
+
+    while (length >= 4U) {
+        *words++ = 0U;
+        length -= 4U;
+    }
+
+    bytes = (uint8_t *)words;
+
+    while (length > 0) {
+        *bytes++ = 0;
+        length--;
     }
 }
 

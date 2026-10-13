@@ -10,7 +10,7 @@ CORE_OBJECTS := \
   $(BUILD)/core/main.o \
   $(BUILD)/core/irq.o \
   $(BUILD)/core/svc.o \
-  $(BUILD)/core/user.o 
+  $(BUILD)/core/user.o
 RUNTIME_OBJECTS := \
 	$(BUILD)/runtime/block.o \
 	$(BUILD)/runtime/exception.o \
@@ -25,6 +25,7 @@ DEPENDENCIES := $(OBJECTS:.o=.d)
 ARCH_FLAGS := -mcpu=cortex-a9 -marm -mfloat-abi=soft
 CPPFLAGS := -Iinclude
 CFLAGS := $(ARCH_FLAGS) \
+	-O2 \
 	-ffreestanding \
 	-fno-builtin \
 	-fdata-sections \
@@ -68,7 +69,7 @@ $(KERNEL): $(CORE_OBJECTS) $(RUNTIME) linker/kernel.ld
 $(BUILD)/core/%.o: src/core/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
-	
+
 $(BUILD)/core/%.o: src/core/%.S
 	@mkdir -p $(dir $@)
 	$(CC) $(CPPFLAGS) $(ASFLAGS) -c $< -o $@
